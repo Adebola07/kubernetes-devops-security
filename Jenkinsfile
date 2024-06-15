@@ -12,5 +12,10 @@ pipeline {
               archiveArtifacts artifacts: 'target/*.jar', followSymlinks: false
             }
         }   
+      stage('Unit Tests - JUnit and JaCoCo') {
+      steps {
+        sh "mvn test"
+      }
     }
+  }
 }
