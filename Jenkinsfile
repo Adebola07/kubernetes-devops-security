@@ -1,6 +1,10 @@
 pipeline {
   agent any
 
+  tools{
+        maven 'Mymaven'
+    }
+
   stages {
       stage('Build Artifact') {
             steps {
