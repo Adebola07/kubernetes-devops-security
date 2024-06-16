@@ -39,7 +39,7 @@ pipeline {
     stage('Docker Build and Push') {
       steps {
         script {
-         if (env.BUILD_NUMBER <= '12'){
+         if (env.BUILD_NUMBER <= '16') {
                   sh 'echo skipping'
          }
          else {
