@@ -27,7 +27,7 @@ pipeline {
     stage('Docker Build and Push') {
       steps {
         withDockerRegistry([credentialsId: "dockerhub", url: ""]) {
-          sh "sudo docker build -t adebola07/flaskapp:${BUILD_NUMBER} ."
+          sh "docker build -t adebola07/flaskapp:${BUILD_NUMBER} ."
           sh "docker push adebola07/flaskapp:${BUILD_NUMBER}"
         }
       }
