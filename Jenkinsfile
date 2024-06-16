@@ -38,9 +38,14 @@ pipeline {
 
     stage('Docker Build and Push') {
       steps {
-        withDockerRegistry([credentialsId: "dockerhub", url: ""]) {
+         if (env.BUILD_NUMBER <= 12){
+                  sh 'echo skipping'
+         }
+         else {
+          withDockerRegistry([credentialsId: "dockerhub", url: ""]) {
           sh "docker build -t adebola07/flaskapp:${BUILD_NUMBER} ."
           sh "docker push adebola07/flaskapp:${BUILD_NUMBER}"
+          }
         }
       }
     }
