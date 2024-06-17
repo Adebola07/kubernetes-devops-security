@@ -36,6 +36,14 @@ pipeline {
       }
     }
 
+    stage('sonarqube-SAST') {
+        steps {
+            withSonarQubeEnv('Mysonar') {
+                sh "mvn clean verify sonar:sonar -Dsonar.projectKey=maven-project -Dsonar.projectName='maven-project'"
+           }
+       }
+    }
+
     stage('Docker Build and Push') {
       steps {
         script {
