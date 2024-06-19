@@ -58,7 +58,7 @@ pipeline {
               }
              stage ('OPA-Dockerfile scan for vulnerability') {
                   steps {
-                     sh 'cat Dockerfile | docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego -'
+                     sh 'cat Dockerfile | docker run --rm -v /var/jenkins_home/workspace:/project openpolicyagent/conftest test --policy opa-docker-security.rego -'
                   }
              }
           }
