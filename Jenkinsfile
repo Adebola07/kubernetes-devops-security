@@ -59,6 +59,7 @@ pipeline {
              stage ('OPA-Dockerfile scan for vulnerability') {
                   steps {
                      sh 'pwd'
+                     sh "echo $WORKSPACE"
                      sh 'ls -al'
                      sh 'cat Dockerfile | docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego -'
                   }
