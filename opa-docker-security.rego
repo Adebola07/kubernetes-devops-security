@@ -62,7 +62,7 @@ deny[msg] {
 
 # Do not use ADD if possible
 deny[msg] {
-    input[i].Cmd == "add"
+    input[i].Cmd == "ADD"
     msg = sprintf("Line %d: Use COPY instead of ADD", [i])
 }
 
