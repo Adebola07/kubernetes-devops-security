@@ -70,7 +70,7 @@ pipeline {
     stage('Docker Build and Push') {
       steps {
         script {
-         if (env.BUILD_NUMBER >= "16") {
+         if (env.BUILD_NUMBER <= "16") {
                   sh 'echo skipping'
          }
          else {
@@ -82,6 +82,16 @@ pipeline {
       }
     }
     }
+   stage ('k8s-deployment'){
+      steps {
+          script {
+           withKubeConfig([credentialsId: 'kubeconfig']) {
+             sh "sed -i 's#replace#adebola07/flaskapp:${BUILD_NUMBER}#g' k8s_deployment_service.yaml"
+             sh "kubectl apply -f k8s_deployment_service.yaml"
+           }
+         }
+      }
+   }
 
   }
   post {
