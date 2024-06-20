@@ -61,7 +61,7 @@ pipeline {
                      sh 'pwd'
                      sh "echo $WORKSPACE"
                      sh 'ls -al'
-                     sh 'cat Dockerfile | docker run --rm -v /var/lib/docker/volumes/jenkins_home/_data/workspace/DevSecops-pipeline:/project openpolicyagent/conftest test --policy opa-docker-security.rego -'
+                     sh 'docker run --rm -v /var/lib/docker/volumes/jenkins_home/_data/workspace/DevSecops-pipeline:/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
                   }
              }
           }
