@@ -61,7 +61,7 @@ pipeline {
                      sh 'pwd'
                      sh "echo $WORKSPACE"
                      sh 'ls -al'
-                     sh 'cat Dockerfile | docker run --rm -v $(pwd):/project openpolicyagent/conftest test --policy opa-docker-security.rego -'
+                     sh 'cat Dockerfile | docker run --rm -v $WORKSPACE:/project openpolicyagent/conftest test --policy opa-docker-security.rego -'
                   }
              }
           }
