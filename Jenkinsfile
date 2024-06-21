@@ -58,9 +58,6 @@ pipeline {
               }
              stage ('OPA-Dockerfile scan for vulnerability') {
                   steps {
-                     sh 'pwd'
-                     sh "echo $WORKSPACE"
-                     sh 'ls -al'
                      sh 'docker run --rm -v /var/lib/docker/volumes/jenkins_home/_data/workspace/DevSecops-pipeline:/project openpolicyagent/conftest test --policy opa-docker-security.rego Dockerfile'
                   }
              }
@@ -82,6 +79,13 @@ pipeline {
       }
     }
     }
+
+   stage ('opa-k8s-security-scan-for-vulnerability'){
+          steps {
+               sh 'docker run --rm -v /var/lib/docker/volumes/jenkins_home/_data/workspace/DevSecops-pipeline:/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
+         }   
+   }
+
    stage ('k8s-deployment'){
       steps {
           script {
