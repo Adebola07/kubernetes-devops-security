@@ -5,6 +5,15 @@ pipeline {
         maven 'Mymaven'
     }
 
+   environment {
+    deploymentName = "devsecops"
+    containerName = "devsecops-container"
+    serviceName = "devsecops-svc"
+    imageName = "adebola07/flaskapp:${BUILD_NUMBER}"
+    applicationURL="http://68.183.217.216:31432/"
+    applicationURI="/increment/99"
+  }
+
   stages {
       stage('Build Artifact') {
             steps {
@@ -90,12 +99,22 @@ pipeline {
       steps {
           script {
            withKubeConfig([credentialsId: 'kubeconfig']) {
-             sh "sed -i 's#replace#adebola07/flaskapp:${BUILD_NUMBER}#g' k8s_deployment_service.yaml"
-             sh "kubectl apply -f k8s_deployment_service.yaml"
+             sh "bash k8s-deployment-script.sh"
            }
          }
       }
    }
+
+   stage ('k8s-deployment-status-update'){
+      steps {
+          script {
+           withKubeConfig([credentialsId: 'kubeconfig']) {
+             sh "bash k8s-deployment-rollout-status.sh"
+           }
+         }
+      }
+   }
+
 
   }
   post {
