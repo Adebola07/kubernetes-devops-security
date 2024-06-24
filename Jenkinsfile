@@ -101,6 +101,11 @@ pipeline {
                sh "bash kubesec-scan.sh"
                }
            }
+           stage('trivy-image-scan') {
+                   steps {
+                       sh 'bash trivy-k8s-scan.sh'
+                   }
+           }
        }
 
    }
