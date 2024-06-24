@@ -10,7 +10,7 @@ pipeline {
     containerName = "devsecops-container"
     serviceName = "devsecops-svc"
     imageName = "adebola07/flaskapp:${BUILD_NUMBER}"
-    applicationURL="http://68.183.217.216:31432/"
+    applicationURL="http://68.183.217.216"
     applicationURI="/increment/99"
   }
 
@@ -129,6 +129,22 @@ pipeline {
          }
       }
    }
+   
+   stage('Integration Tests - DEV') {
+      steps {
+        script {
+          try {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "bash integration-test.sh"
+            }
+          catch (e) {
+            withKubeConfig([credentialsId: 'kubeconfig']) {
+              sh "kubectl -n default rollout undo deploy ${deploymentName}"
+            }
+          }
+        }
+      }
+    }
 
 
   }
