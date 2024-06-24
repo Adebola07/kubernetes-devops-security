@@ -89,10 +89,20 @@ pipeline {
     }
     }
 
-   stage ('opa-k8s-security-scan-for-vulnerability'){
-          steps {
+   stage ('k8s-security-scan-for-vulnerability'){
+       parallel {
+           stage ('opa-k8s-scan') {
+               steps { 
                sh 'docker run --rm -v /var/lib/docker/volumes/jenkins_home/_data/workspace/DevSecops-pipeline:/project openpolicyagent/conftest test --policy opa-k8s-security.rego k8s_deployment_service.yaml'
-         }   
+               }
+           }
+           stage('kubesec-k8s-scan') {
+               steps {
+               sh "bash kubesec-scan.sh"
+               }
+           }
+       }
+
    }
 
    stage ('k8s-deployment'){
