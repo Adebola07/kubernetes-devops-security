@@ -4,13 +4,13 @@ PORT=$(kubectl -n default get svc ${serviceName} -o json | jq .spec.ports[].node
 
 working_dir=/var/lib/docker/volumes/jenkins_home/_data/workspace/DevSecops-pipeline
 # first run this
-chmod 777 $working_dir
+chmod 777 $(pwd)
 echo $(id -u):$(id -g)
 docker run -v $working_dir:/zap/wrk/:rw -t zaproxy/zap-weekly zap-api-scan.py -t $applicationURL:$PORT/v3/api-docs -f openapi -r zap_report.html
 
 
 # comment above cmd and uncomment below lines to run with CUSTOM RULES
-#docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t $applicationURL:$PORT/v3/api-docs -f openapi -c zap_rules -r zap_report.html
+#docker run -v $working_dir:/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t $applicationURL:$PORT/v3/api-docs -f openapi -c zap_rules -r zap_report.html
 
 exit_code=$?
 
@@ -31,4 +31,4 @@ fi;
 
 
 # Generate ConfigFile
-# docker run -v $(pwd):/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t http://devsecops-demo.eastus.cloudapp.azure.com:31933/v3/api-docs -f openapi -g gen_file
+# docker run -v $working_dir:/zap/wrk/:rw -t owasp/zap2docker-weekly zap-api-scan.py -t http://devsecops-demo.eastus.cloudapp.azure.com:31933/v3/api-docs -f openapi -g gen_file
