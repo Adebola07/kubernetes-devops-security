@@ -147,6 +147,13 @@ pipeline {
       }
     }
 
+   stage('OWASP ZAP - DAST') {
+      steps {
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh 'bash zap.sh'
+        }
+      }
+    }   
 
   }
   post {
@@ -155,6 +162,7 @@ pipeline {
        jacoco execPattern: 'target/jacoco.exec'
      
        dependencyCheckPublisher pattern: 'target/dependency-check-report.xml'
+       publishHTML([allowMissing: false, alwaysLinkToLastBuild: true, keepAll: true, reportDir: 'owasp-zap-report', reportFiles: 'zap_report.html', reportName: 'OWASP', reportTitles: 'OWASP', useWrapperFileDirectly: true])
 
     }
   }
