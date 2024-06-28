@@ -122,7 +122,7 @@ pipeline {
       }
    }
 
-   stage ('k8s-deployment-status-update'){
+   stage ('k8s-deployment-status-update-DEV'){
       steps {
           script {
            withKubeConfig([credentialsId: 'kubeconfig']) {
@@ -155,7 +155,25 @@ pipeline {
           sh 'bash zap.sh'
         }
       }
-    }   
+    }
+
+   stage('Prompte to PROD?') {
+      steps {
+        timeout(time: 2, unit: 'DAYS') {
+          input 'Do you want to Approve the Deployment to Production Environment/Namespace?'
+        }
+      }
+    }
+
+   stage('PROD-K8S CIS Benchmark') {
+      steps {
+        withKubeConfig([credentialsId: 'kubeconfig']) {
+          sh 'bash kube-bench-scan.sh'
+        }
+      }
+    }
+
+
 
   }
   post {
